@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+                        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+	<!-- Executed when webFlow is triggered -->
+	<on-start>
+		<evaluate expression="checkouthandler.initFlow()" result="flowScope.shippingdetails" />
+	</on-start>
+	<view-state id="start" view="ShippingForm" model="flowScope.shippingdetails">
+		<transition on="submit" to="validate" />
+	</view-state>
+	<action-state id="validate">
+		<evaluate
+			expression="checkouthandler.validateDetails(shippingdetails,messageContext)"></evaluate>
+		<transition on="success" to="confirm" />
+		<transition on="failure" to="start" />
+	</action-state>
+	<view-state id="confirm" view="Fullcart" model="flowScope.shippingdetails">
+		<transition on="edit" to="start" />
+		<transition on="submit" to="save" />
+	</view-state>
+	<action-state id="save">
+		<evaluate expression="checkouthandler.save(shippingdetails)" />
+		<transition to="savecart"></transition>
+	</action-state>
+	<action-state id="savecart">
+		<evaluate expression="checkouthandler.updatedeatils(shippingdetails)"></evaluate>
+		<transition to="payment" />
+	</action-state>
+	<end-state id="payment" view="payment"/>
+		<!-- <transition on="submit" to="order" />
+	</view-state>
+	<action-state id="order">
+		<evaluate expression="checkouthandler.saveorder(shippingdetails)" />
+		<transition to="details"></transition>
+	</action-state>
+	
+	<view-state id="details" view="success">
+	<transition  on="submit" to="delete"></transition>
+	</view-state>
+	
+	<action-state id="delete">
+	<evaluate expression="checkouthandler.delete()"></evaluate>
+	<transition to="final"></transition>
+	</action-state>
+	<end-state id="final" view="extrenlRedict:/home"/>
+	<end-state id="toHome" view="externalRedirect:contextRelative:index" />
+
+	<end-state id="toException" view="externalRedirect:contextRelative:exception" />
+	these events are available in every state
+	<global-transitions>
+		<transition on="home" to="toHome" />
+		<transition on="error" to="toException" />
+	</global-transitions>
+	 -->
+</flow>

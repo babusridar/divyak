@@ -1,0 +1,18 @@
+#the-slider img{
+width : 100%;
+}
+
+.navbar{
+	background-color:#282828;
+}
+.navbar li a{
+	
+	color:white !important;
+}
+.navbar li a:hover{
+	
+	color:red !important;
+}
+.navbar-default .navbar-nav>.active>a{
+	background-color: blue !important;
+}

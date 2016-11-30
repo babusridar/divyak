@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+                        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+                        
+	<!-- Executed when webFlow is triggered -->
+	<on-start>
+		<!-- demohandler is java class available through annotated Demohandler.java 
+			class.here we are calling it’s initFlow() method. -->
+		<evaluate expression="demohandler.initFlow()" result="flowScope.newuser" />
+	</on-start>
+
+	<!-- if not specified the first view state is the starting state -->
+	<view-state id="start" view="memberDetails" model="flowScope.newuser">
+		<transition on="submit" to="validate" />
+	</view-state>
+
+	<action-state id="validate">
+		<evaluate expression="demohandler.validateDetails(newuser,messageContext)"></evaluate>
+		<transition on="success" to="confirmDetails" />
+		<transition on="failure" to="start" />
+	</action-state>
+
+	<view-state id="confirmDetails" view="confirmDetails" model="flowScope.newuser">
+		<transition on="edit" to="start" />
+		<transition on="submit" to="send" />
+	</view-state>
+
+	<action-state id="send">
+		<evaluate expression="demohandler.send(newuser)" />
+		<transition to="save"></transition>
+
+	</action-state>
+
+	<action-state id="save">
+		<evaluate expression="demohandler.save(newuser)" />
+		<transition to="welcome"></transition>
+
+	</action-state>
+
+	<end-state id="welcome" view="Login" />
+
+	<end-state id="toHome" view="externalRedirect:contextRelative:index" />
+
+	<end-state id="toException" view="externalRedirect:contextRelative:exception" />
+	<!-- these events are available in every state -->
+	<global-transitions>
+		<transition on="home" to="toHome" />
+		<transition on="error" to="toException" />
+	</global-transitions>
+</flow>
